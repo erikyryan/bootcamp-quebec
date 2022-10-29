@@ -3,6 +3,7 @@ package me.dio.parking.controllers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.dio.parking.controllers.mappers.ParkingMapper;
+import me.dio.parking.exception.ParkingNotFoundException;
 import me.dio.parking.models.Parking;
 import me.dio.parking.models.dto.ParkingCreateDTO;
 import me.dio.parking.models.dto.ParkingDTO;
@@ -40,6 +41,9 @@ public class ParkingController {
     @ApiOperation("Find by id a parking")
     public ResponseEntity<ParkingDTO> findById(@PathVariable String id){
         Parking parking =  parkingService.findById(id);
+        if(parking == null){
+            throw new ParkingNotFoundException(id);
+        }
         ParkingDTO result = parkingMapper.toParkingDTO(parking);
         return ResponseEntity.ok(result);
     }
